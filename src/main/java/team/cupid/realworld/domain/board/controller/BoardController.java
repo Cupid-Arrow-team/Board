@@ -33,6 +33,16 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<BoardReadResponseDto> searchBoard(
+            @RequestParam(name = "title") String title,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        BoardReadResponseDto responseDto = boardService.search(title, customUserDetails.getId());
+
+        return ResponseEntity.ok(responseDto);
+    }
+
     @GetMapping("/search/all")
     public ResponseEntity<List<BoardReadResponseDto>> searchBoardAll(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -42,7 +52,7 @@ public class BoardController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/page")
     public ResponseEntity<CustomPageResponse> searchBoardPage(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "pageNumber") Integer pageNumber

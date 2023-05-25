@@ -47,7 +47,6 @@ public class BoardService {
     private final CacheRepository cacheRepository;
 
 
-    @CacheEvict(value = BOARD_KEY, allEntries = true)
     public BoardSaveResponseDto save(BoardSaveRequestDto request, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
@@ -68,6 +67,11 @@ public class BoardService {
         List<String> tagList = getTagNameList(board.getId());
 
         return BoardSaveResponseDto.of(board, tagList);
+    }
+
+    public BoardReadResponseDto search(String title, Long memberId) {
+
+        return null;
     }
 
     @Transactional(readOnly = true)
@@ -107,14 +111,12 @@ public class BoardService {
         return CustomPageResponse.of(page, list);
     }
 
-    @CacheEvict(value = BOARD_KEY, allEntries = true)
     public BoardUpdateResponseDto update(BoardUpdateRequestDto request, Long memberId) {
         Board board = boardRepository.findById(request.getId())
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         matchBoardWriter(board, memberId);
 
-        //기존 태그를 가져온다
         List<Long> tagIds = board.getBoardTags().stream()
                 .map(boardTag -> boardTag.getTag().getId())
                 .collect(Collectors.toList());
@@ -145,7 +147,6 @@ public class BoardService {
             }
         }
 
-        //기존에 있던 태그를 지울 수도 있다.
         for (String tagName : tagUseCheckMap.keySet()) {
 
             if(tagUseCheckMap.get(tagName) == false) {
@@ -190,4 +191,5 @@ public class BoardService {
             throw new NoMatchBoardWriterException(ErrorCode.NO_MATCH_BOARD_WRITER);
         }
     }
+
 }
