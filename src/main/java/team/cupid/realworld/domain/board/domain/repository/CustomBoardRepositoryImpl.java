@@ -29,27 +29,6 @@ public class CustomBoardRepositoryImpl implements CustomBoardRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<List<BoardReadResponseDto>> searchABoardReadDto(Long id, String title) {
-        QBoard b = board;
-        QMember m = member;
-        QGood g = good;
-
-        EntityPathBase<?>[] paths = { b, m, g };
-
-        List<BoardReadResponseDto> list =
-                queryFactory.select(Projections.constructor(BoardReadResponseDto.class
-                                , getConstructorExpressions(paths)))
-                        .from(b)
-                        .join(m).on(b.member.memberId.eq(m.memberId))
-                        .leftJoin(g).on(b.id.eq(g.board.id).and(g.member.memberId.eq(id)))
-                        .where(b.boardStatus.eq(BoardStatus.SAVED).and(b.title.contains(title)))
-                        .orderBy(b.id.desc())
-                        .fetch();
-
-        return Optional.ofNullable(list);
-    }
-
-    @Override
     public Optional<List<BoardReadResponseDto>> readAllBoardReadDto(Long id) {
         QBoard b = board;
         QMember m = member;

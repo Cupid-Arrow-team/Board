@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,22 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.cupid.realworld.domain.board.domain.Board;
 import team.cupid.realworld.domain.board.domain.repository.BoardRepository;
-import team.cupid.realworld.domain.board.domain.repository.CacheRepository;
 import team.cupid.realworld.domain.board.domain.tag.*;
 import team.cupid.realworld.domain.board.dto.*;
 import team.cupid.realworld.domain.board.exception.BoardNotFoundException;
 import team.cupid.realworld.domain.board.exception.BoardTagNotFoundException;
 import team.cupid.realworld.domain.board.exception.NoMatchBoardWriterException;
 import team.cupid.realworld.domain.board.exception.TagNotFoundException;
-import team.cupid.realworld.domain.good.domain.Good;
-import team.cupid.realworld.domain.good.domain.repository.GoodRepository;
-import team.cupid.realworld.domain.good.exception.GoodNotFoundException;
 import team.cupid.realworld.domain.member.domain.Member;
 import team.cupid.realworld.domain.member.domain.repository.MemberRepository;
 import team.cupid.realworld.domain.member.exception.MemberNotFoundException;
 import team.cupid.realworld.global.common.CustomPageResponse;
 import team.cupid.realworld.global.error.exception.ErrorCode;
-import team.cupid.realworld.global.policy.RedisPolicy;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +37,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
     private final BoardTagRepository boardTagRepository;
-
 
     public BoardSaveResponseDto save(BoardSaveRequestDto request, Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -65,17 +58,6 @@ public class BoardService {
         List<String> tagList = getTagNameList(board.getId());
 
         return BoardSaveResponseDto.of(board, tagList);
-    }
-
-    public List<BoardReadResponseDto> search(String title, Long memberId) {
-        List<BoardReadResponseDto> list = boardRepository.searchABoardReadDto(memberId, title)
-                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
-
-        for (BoardReadResponseDto responseDto : list) {
-            responseDto.setTags(getTagNameList(responseDto.getBoardId()));
-        }
-
-        return list;
     }
 
     @Transactional(readOnly = true)

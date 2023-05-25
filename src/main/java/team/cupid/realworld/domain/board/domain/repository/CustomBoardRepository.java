@@ -9,8 +9,6 @@ import java.util.Optional;
 
 public interface CustomBoardRepository {
 
-    Optional<List<BoardReadResponseDto>> searchABoardReadDto(Long id, String title);
-
     Optional<List<BoardReadResponseDto>> readAllBoardReadDto(Long id);
 
     Optional<Page<BoardReadResponseDto>> readPageBoardReadDto(Long id, Pageable pageable);

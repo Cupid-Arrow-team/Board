@@ -3,7 +3,6 @@ package team.cupid.realworld.domain.board.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +13,6 @@ import team.cupid.realworld.global.common.CustomPageResponse;
 import team.cupid.realworld.global.security.principal.CustomUserDetails;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
@@ -32,16 +30,6 @@ public class BoardController {
         BoardSaveResponseDto responseDto = boardService.save(request, customUserDetails.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<BoardReadResponseDto>> searchBoard(
-            @RequestParam(name = "title") String title,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        List<BoardReadResponseDto> responseDto = boardService.search(title, customUserDetails.getId());
-
-        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/read/all")
