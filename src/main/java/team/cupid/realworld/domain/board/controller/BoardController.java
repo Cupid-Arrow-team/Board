@@ -14,6 +14,7 @@ import team.cupid.realworld.global.common.CustomPageResponse;
 import team.cupid.realworld.global.security.principal.CustomUserDetails;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
@@ -34,31 +35,32 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BoardReadResponseDto> searchBoard(
+    public ResponseEntity<List<BoardReadResponseDto>> searchBoard(
             @RequestParam(name = "title") String title,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        BoardReadResponseDto responseDto = boardService.search(title, customUserDetails.getId());
+        List<BoardReadResponseDto> responseDto = boardService.search(title, customUserDetails.getId());
 
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/search/all")
-    public ResponseEntity<List<BoardReadResponseDto>> searchBoardAll(
+    @GetMapping("/read/all")
+    public ResponseEntity<List<BoardReadResponseDto>> readBoardAll(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        List<BoardReadResponseDto> responseDto = boardService.searchAll(customUserDetails.getId());
+        List<BoardReadResponseDto> responseDto = boardService.readAll(customUserDetails.getId());
 
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/search/page")
-    public ResponseEntity<CustomPageResponse> searchBoardPage(
+    @GetMapping("/read/page")
+    public ResponseEntity<CustomPageResponse> readBoardPage(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "pageNumber") Integer pageNumber
     ) {
         Pageable pageable = PageRequest.of(pageNumber, 10);
-        return ResponseEntity.ok(boardService.searchPage(customUserDetails.getId(), pageable));
+
+        return ResponseEntity.ok(boardService.readPage(customUserDetails.getId(), pageable));
     }
 
     @PatchMapping

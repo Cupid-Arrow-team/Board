@@ -19,8 +19,7 @@ public class CacheRepository {
 
     @Cacheable(key = "#pageable.getPageNumber()", value = BOARD_KEY)
     public Page<BoardReadResponseDto> getBoardReadResponseDtosBy(Pageable pageable) {
-        return boardRepository.searchPageBoardReadDto(pageable)
-                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
+        return null;
     }
 
 }

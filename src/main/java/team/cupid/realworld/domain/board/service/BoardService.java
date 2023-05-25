@@ -43,8 +43,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
     private final BoardTagRepository boardTagRepository;
-    private final GoodRepository goodRepository;
-    private final CacheRepository cacheRepository;
 
 
     public BoardSaveResponseDto save(BoardSaveRequestDto request, Long memberId) {
@@ -69,14 +67,8 @@ public class BoardService {
         return BoardSaveResponseDto.of(board, tagList);
     }
 
-    public BoardReadResponseDto search(String title, Long memberId) {
-
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    public List<BoardReadResponseDto> searchAll(Long memberId) {
-        List<BoardReadResponseDto> list = boardRepository.searchAllBoardReadDto(memberId)
+    public List<BoardReadResponseDto> search(String title, Long memberId) {
+        List<BoardReadResponseDto> list = boardRepository.searchABoardReadDto(memberId, title)
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         for (BoardReadResponseDto responseDto : list) {
@@ -87,25 +79,26 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public CustomPageResponse<BoardReadResponseDto> searchPage(Long memberId, Pageable pageable) {
-        Page<BoardReadResponseDto> page = cacheRepository.getBoardReadResponseDtosBy(pageable);
+    public List<BoardReadResponseDto> readAll(Long memberId) {
+        List<BoardReadResponseDto> list = boardRepository.readAllBoardReadDto(memberId)
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
+
+        for (BoardReadResponseDto responseDto : list) {
+            responseDto.setTags(getTagNameList(responseDto.getBoardId()));
+        }
+
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public CustomPageResponse<BoardReadResponseDto> readPage(Long memberId, Pageable pageable) {
+        Page<BoardReadResponseDto> page = boardRepository.readPageBoardReadDto(memberId, pageable)
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         List<BoardReadResponseDto> list = page.getContent();
 
         for (BoardReadResponseDto responseDto : list) {
             responseDto.setTags(getTagNameList(responseDto.getBoardId()));
-
-            if (goodRepository.existsByBoardIdAndMemberMemberId(responseDto.getBoardId(), memberId)) {
-                Good good = goodRepository.findByBoardIdAndMemberMemberId(responseDto.getBoardId(), memberId)
-                        .orElseThrow(() -> new GoodNotFoundException(ErrorCode.GOOD_NOT_FOUND));
-                if (good.isGood()) {
-                    responseDto.isGood();
-                } else {
-                    responseDto.isNotGood();
-                }
-            } else {
-                responseDto.isNotGood();
-            }
         }
 
         return CustomPageResponse.of(page, list);
