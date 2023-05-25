@@ -3,7 +3,6 @@ package team.cupid.realworld.domain.board.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,22 +32,23 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/search/all")
-    public ResponseEntity<List<BoardReadResponseDto>> searchBoardAll(
+    @GetMapping("/read/all")
+    public ResponseEntity<List<BoardReadResponseDto>> readBoardAll(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        List<BoardReadResponseDto> responseDto = boardService.searchAll(customUserDetails.getId());
+        List<BoardReadResponseDto> responseDto = boardService.readAll(customUserDetails.getId());
 
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<CustomPageResponse> searchBoardPage(
+    @GetMapping("/read/page")
+    public ResponseEntity<CustomPageResponse> readBoardPage(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "pageNumber") Integer pageNumber
     ) {
         Pageable pageable = PageRequest.of(pageNumber, 10);
-        return ResponseEntity.ok(boardService.searchPage(customUserDetails.getId(), pageable));
+
+        return ResponseEntity.ok(boardService.readPage(customUserDetails.getId(), pageable));
     }
 
     @PatchMapping

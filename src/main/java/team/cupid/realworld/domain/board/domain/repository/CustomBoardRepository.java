@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CustomBoardRepository {
 
-    Optional<List<BoardReadResponseDto>> searchAllBoardReadDto(Long id);
+    Optional<List<BoardReadResponseDto>> readAllBoardReadDto(Long id);
 
-    Optional<Page<BoardReadResponseDto>> searchPageBoardReadDto(Pageable pageable);
+    Optional<Page<BoardReadResponseDto>> readPageBoardReadDto(Long id, Pageable pageable);
 }

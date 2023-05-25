@@ -1,6 +1,8 @@
 package team.cupid.realworld.domain.board.domain.repository;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,20 +29,16 @@ public class CustomBoardRepositoryImpl implements CustomBoardRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<List<BoardReadResponseDto>> searchAllBoardReadDto(Long id) {
+    public Optional<List<BoardReadResponseDto>> readAllBoardReadDto(Long id) {
         QBoard b = board;
         QMember m = member;
         QGood g = good;
 
+        EntityPathBase<?>[] paths = { b, m, g };
+
         List<BoardReadResponseDto> list =
                 queryFactory.select(Projections.constructor(BoardReadResponseDto.class
-                        , b.id.as("boardId")
-                        , b.title
-                        , b.content
-                        , m.nickname.as("writer")
-                        , b.createTime.as("createdDate")
-                        , g.isGood
-                        , b.goodCount))
+                        , getConstructorExpressions(paths)))
                         .from(b)
                         .join(m).on(b.member.memberId.eq(m.memberId))
                         .leftJoin(g).on(b.id.eq(g.board.id).and(g.member.memberId.eq(id)))
@@ -52,20 +50,19 @@ public class CustomBoardRepositoryImpl implements CustomBoardRepository {
     }
 
     @Override
-    public Optional<Page<BoardReadResponseDto>> searchPageBoardReadDto(Pageable pageable) {
+    public Optional<Page<BoardReadResponseDto>> readPageBoardReadDto(Long id, Pageable pageable) {
         QBoard b = board;
         QMember m = member;
+        QGood g = good;
+
+        EntityPathBase<?>[] paths = { b, m, g };
 
         List<BoardReadResponseDto> list =
                 queryFactory.select(Projections.constructor(BoardReadResponseDto.class
-                                , b.id.as("boardId")
-                                , b.title
-                                , b.content
-                                , m.nickname.as("writer")
-                                , b.createTime.as("createdDate")
-                                , b.goodCount))
+                                , getConstructorExpressions(paths)))
                         .from(b)
                         .join(m).on(b.member.memberId.eq(m.memberId))
+                        .leftJoin(g).on(b.id.eq(g.board.id).and(g.member.memberId.eq(id)))
                         .where(b.boardStatus.eq(BoardStatus.SAVED))
                         .orderBy(b.id.desc())
                         .offset(pageable.getOffset())
@@ -73,6 +70,22 @@ public class CustomBoardRepositoryImpl implements CustomBoardRepository {
                         .fetch();
 
         return Optional.ofNullable(new PageImpl<>(list, pageable, list.size()));
+    }
+
+    private Expression<?>[] getConstructorExpressions(EntityPathBase<?>[] paths) {
+        QBoard b = (QBoard) paths[0];
+        QMember m = (QMember) paths[1];
+        QGood g = (QGood) paths[2];
+
+        return new Expression<?>[]{
+                b.id.as("boardId"),
+                b.title,
+                b.content,
+                m.nickname.as("writer"),
+                b.createTime.as("createdDate"),
+                g.isGood,
+                b.goodCount
+        };
     }
 }
 

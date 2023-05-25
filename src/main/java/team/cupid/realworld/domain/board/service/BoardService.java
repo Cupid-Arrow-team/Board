@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,22 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.cupid.realworld.domain.board.domain.Board;
 import team.cupid.realworld.domain.board.domain.repository.BoardRepository;
-import team.cupid.realworld.domain.board.domain.repository.CacheRepository;
 import team.cupid.realworld.domain.board.domain.tag.*;
 import team.cupid.realworld.domain.board.dto.*;
 import team.cupid.realworld.domain.board.exception.BoardNotFoundException;
 import team.cupid.realworld.domain.board.exception.BoardTagNotFoundException;
 import team.cupid.realworld.domain.board.exception.NoMatchBoardWriterException;
 import team.cupid.realworld.domain.board.exception.TagNotFoundException;
-import team.cupid.realworld.domain.good.domain.Good;
-import team.cupid.realworld.domain.good.domain.repository.GoodRepository;
-import team.cupid.realworld.domain.good.exception.GoodNotFoundException;
 import team.cupid.realworld.domain.member.domain.Member;
 import team.cupid.realworld.domain.member.domain.repository.MemberRepository;
 import team.cupid.realworld.domain.member.exception.MemberNotFoundException;
 import team.cupid.realworld.global.common.CustomPageResponse;
 import team.cupid.realworld.global.error.exception.ErrorCode;
-import team.cupid.realworld.global.policy.RedisPolicy;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,11 +37,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
     private final BoardTagRepository boardTagRepository;
-    private final GoodRepository goodRepository;
-    private final CacheRepository cacheRepository;
 
-
-    @CacheEvict(value = BOARD_KEY, allEntries = true)
     public BoardSaveResponseDto save(BoardSaveRequestDto request, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
@@ -71,8 +61,8 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardReadResponseDto> searchAll(Long memberId) {
-        List<BoardReadResponseDto> list = boardRepository.searchAllBoardReadDto(memberId)
+    public List<BoardReadResponseDto> readAll(Long memberId) {
+        List<BoardReadResponseDto> list = boardRepository.readAllBoardReadDto(memberId)
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         for (BoardReadResponseDto responseDto : list) {
@@ -83,38 +73,25 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public CustomPageResponse<BoardReadResponseDto> searchPage(Long memberId, Pageable pageable) {
-        Page<BoardReadResponseDto> page = cacheRepository.getBoardReadResponseDtosBy(pageable);
+    public CustomPageResponse<BoardReadResponseDto> readPage(Long memberId, Pageable pageable) {
+        Page<BoardReadResponseDto> page = boardRepository.readPageBoardReadDto(memberId, pageable)
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         List<BoardReadResponseDto> list = page.getContent();
 
         for (BoardReadResponseDto responseDto : list) {
             responseDto.setTags(getTagNameList(responseDto.getBoardId()));
-
-            if (goodRepository.existsByBoardIdAndMemberMemberId(responseDto.getBoardId(), memberId)) {
-                Good good = goodRepository.findByBoardIdAndMemberMemberId(responseDto.getBoardId(), memberId)
-                        .orElseThrow(() -> new GoodNotFoundException(ErrorCode.GOOD_NOT_FOUND));
-                if (good.isGood()) {
-                    responseDto.isGood();
-                } else {
-                    responseDto.isNotGood();
-                }
-            } else {
-                responseDto.isNotGood();
-            }
         }
 
         return CustomPageResponse.of(page, list);
     }
 
-    @CacheEvict(value = BOARD_KEY, allEntries = true)
     public BoardUpdateResponseDto update(BoardUpdateRequestDto request, Long memberId) {
         Board board = boardRepository.findById(request.getId())
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         matchBoardWriter(board, memberId);
 
-        //기존 태그를 가져온다
         List<Long> tagIds = board.getBoardTags().stream()
                 .map(boardTag -> boardTag.getTag().getId())
                 .collect(Collectors.toList());
@@ -145,7 +122,6 @@ public class BoardService {
             }
         }
 
-        //기존에 있던 태그를 지울 수도 있다.
         for (String tagName : tagUseCheckMap.keySet()) {
 
             if(tagUseCheckMap.get(tagName) == false) {
@@ -190,4 +166,5 @@ public class BoardService {
             throw new NoMatchBoardWriterException(ErrorCode.NO_MATCH_BOARD_WRITER);
         }
     }
+
 }
