@@ -14,7 +14,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @IdClass(BoardTagId.class)
-public class BoardTag{
+public class BoardTag {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
