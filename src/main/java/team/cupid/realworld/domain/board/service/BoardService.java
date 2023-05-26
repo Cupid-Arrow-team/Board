@@ -2,7 +2,6 @@ package team.cupid.realworld.domain.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -87,7 +86,7 @@ public class BoardService {
     }
 
     public BoardUpdateResponseDto update(BoardUpdateRequestDto request, Long memberId) {
-        Board board = boardRepository.findById(request.getId())
+        Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         matchBoardWriter(board, memberId);

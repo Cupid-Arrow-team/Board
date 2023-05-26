@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardUpdateRequestDto {
     @NotNull
-    private Long id;
+    private Long boardId;
     @NotBlank
     @Size(min = 3, max = 30)
     private String title;
@@ -25,8 +25,8 @@ public class BoardUpdateRequestDto {
     private List<@NotBlank String> tags;
 
     @Builder
-    public BoardUpdateRequestDto(Long id, String title, String content, List<String> tags) {
-        this.id = id;
+    public BoardUpdateRequestDto(Long boardId, String title, String content, List<String> tags) {
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.tags = tags;
