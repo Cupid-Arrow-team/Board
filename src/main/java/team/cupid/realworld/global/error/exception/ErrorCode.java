@@ -10,13 +10,17 @@ public enum ErrorCode {
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
     // Board
-    BOARD_NOT_FOUND(500, "B001", "Server Error"),
-    BOARD_TAG_NOT_FOUND(500, "B002", "Server Error"),
-    TAG_NOT_FOUND(500, "B003", "Server Error"),
+    BOARD_NOT_FOUND(500, "B001", "Board Not Found Error"),
+    BOARD_TAG_NOT_FOUND(500, "B002", "BoardTag Not Found Error"),
+    TAG_NOT_FOUND(500, "B003", "Tag Not Found Error"),
     NO_MATCH_BOARD_WRITER(401, "B004", "Unauthorized"),
 
+    // Comment
+    COMMENT_NOT_FOUND(500, "CMT001", "Comment Not Found Error"),
+    NO_MATCH_COMMENTER(401, "CMT002", "Unauthorized"),
+
     // Good
-    GOOD_NOT_FOUND(500, "G001", "Server Error"),
+    GOOD_NOT_FOUND(500, "G001", "Good Not Found Error"),
     ALREADY_LIKED(500, "G002", "Server Error"),
     NOT_LIKED(500, "G003", "Server Error"),
 
