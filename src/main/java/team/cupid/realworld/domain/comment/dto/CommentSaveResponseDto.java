@@ -14,15 +14,12 @@ public class CommentSaveResponseDto {
 
     private Long boardId;
 
-    private Long memberId;
-
     private String comment;
 
     public static CommentSaveResponseDto of(Comment comment) {
         return CommentSaveResponseDto.builder()
                 .commentId(comment.getId())
                 .boardId(comment.getBoard().getId())
-                .memberId(comment.getMember().getMemberId())
                 .comment(comment.getComment())
                 .build();
     }

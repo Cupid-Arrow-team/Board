@@ -146,14 +146,14 @@ public class BoardService {
 
         matchBoardWriter(board, memberId);
 
-        boardRepository.delete(board);
+        boardRepository.deleteById(board.getId());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // common method
-    private List<String> getTagNameList(Long id) {
-        return boardTagRepository.findAllByBoardId(id)
+    private List<String> getTagNameList(Long boardId) {
+        return boardTagRepository.findAllByBoardId(boardId)
                 .orElseThrow(() -> new BoardTagNotFoundException(ErrorCode.BOARD_TAG_NOT_FOUND))
                 .stream().map(e -> e.getTag().getName()).collect(Collectors.toList());
     }
