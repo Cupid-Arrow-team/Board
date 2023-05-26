@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.cupid.realworld.domain.board.domain.Board;
+import team.cupid.realworld.domain.comment.domain.Comment;
 import team.cupid.realworld.domain.good.domain.Good;
 import team.cupid.realworld.global.common.BaseEntity;
 
@@ -39,6 +40,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Good> goods = new ArrayList<>();

@@ -32,7 +32,7 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/read/all")
+    @GetMapping("/all")
     public ResponseEntity<List<BoardReadResponseDto>> readBoardAll(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
@@ -41,7 +41,7 @@ public class BoardController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/read/page")
+    @GetMapping("/page")
     public ResponseEntity<CustomPageResponse> readBoardPage(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "pageNumber") Integer pageNumber

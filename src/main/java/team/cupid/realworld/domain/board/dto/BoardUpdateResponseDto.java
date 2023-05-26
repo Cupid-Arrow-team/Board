@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import team.cupid.realworld.domain.board.domain.Board;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter

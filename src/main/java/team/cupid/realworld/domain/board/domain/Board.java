@@ -2,6 +2,7 @@ package team.cupid.realworld.domain.board.domain;
 
 import lombok.*;
 import team.cupid.realworld.domain.board.domain.tag.BoardTag;
+import team.cupid.realworld.domain.comment.domain.Comment;
 import team.cupid.realworld.domain.good.domain.Good;
 import team.cupid.realworld.domain.board.domain.tag.Tag;
 import team.cupid.realworld.domain.member.domain.Member;
@@ -32,6 +33,9 @@ public class Board extends BaseEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardTag> boardTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Good> goods = new ArrayList<>();
