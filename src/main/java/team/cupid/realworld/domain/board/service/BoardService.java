@@ -140,7 +140,6 @@ public class BoardService {
         return BoardUpdateResponseDto.of(board, tagList);
     }
 
-    @CacheEvict(value = BOARD_KEY, allEntries = true)
     public ResponseEntity<Void> delete(Long boardId, Long memberId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardTagNotFoundException(ErrorCode.BOARD_NOT_FOUND));

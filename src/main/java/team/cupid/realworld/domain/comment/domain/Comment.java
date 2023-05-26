@@ -13,15 +13,17 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(CommentId.class)
 public class Comment extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -29,7 +31,8 @@ public class Comment extends BaseEntity {
     private String comment;
 
     @Builder
-    public Comment(Board board, Member member, String comment) {
+    public Comment(Long id, Board board, Member member, String comment) {
+        this.id = id;
         this.board = board;
         this.member = member;
         this.comment = comment;

@@ -5,25 +5,27 @@ import lombok.Builder;
 import lombok.Getter;
 import team.cupid.realworld.domain.comment.domain.Comment;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
-public class CommentSaveResponseDto {
+public class CommentReadResponseDto {
 
     private Long commentId;
 
-    private Long boardId;
-
-    private Long memberId;
+    private String commenter;
 
     private String comment;
 
-    public static CommentSaveResponseDto of(Comment comment) {
-        return CommentSaveResponseDto.builder()
+    private LocalDateTime createDate;
+
+    public static CommentReadResponseDto of(Comment comment) {
+        return CommentReadResponseDto.builder()
                 .commentId(comment.getId())
-                .boardId(comment.getBoard().getId())
-                .memberId(comment.getMember().getMemberId())
+                .commenter(comment.getMember().getNickname())
                 .comment(comment.getComment())
+                .createDate(comment.getCreateTime())
                 .build();
     }
 }
