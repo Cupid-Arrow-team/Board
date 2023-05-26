@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import team.cupid.realworld.domain.board.dto.*;
-import team.cupid.realworld.domain.comment.dto.CommentReadResponseDto;
-import team.cupid.realworld.domain.comment.dto.CommentSaveRequestDto;
-import team.cupid.realworld.domain.comment.dto.CommentSaveResponseDto;
+import team.cupid.realworld.domain.comment.dto.*;
 import team.cupid.realworld.domain.comment.service.CommentService;
 import team.cupid.realworld.global.common.CustomPageResponse;
 import team.cupid.realworld.global.security.principal.CustomUserDetails;
@@ -42,6 +40,16 @@ public class CommentController {
         List<CommentReadResponseDto> responseDto = commentService.read(boardId);
 
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PatchMapping
+    public ResponseEntity<CommentUpdateResponseDto> updateComment(
+            @RequestBody @Valid final CommentUpdateRequestDto request,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        CommentUpdateResponseDto responseDto = commentService.update(request, customUserDetails.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
 }

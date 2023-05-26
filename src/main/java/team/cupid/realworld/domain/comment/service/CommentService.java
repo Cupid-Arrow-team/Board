@@ -3,9 +3,7 @@ package team.cupid.realworld.domain.comment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.cupid.realworld.domain.comment.dto.CommentReadResponseDto;
-import team.cupid.realworld.domain.comment.dto.CommentSaveRequestDto;
-import team.cupid.realworld.domain.comment.dto.CommentSaveResponseDto;
+import team.cupid.realworld.domain.comment.dto.*;
 
 import java.util.List;
 
@@ -19,6 +17,11 @@ public class CommentService {
     }
 
     public List<CommentReadResponseDto> read(Long boardId) {
+
+        return null;
+    }
+
+    public CommentUpdateResponseDto update(CommentUpdateRequestDto request, Long id) {
 
         return null;
     }

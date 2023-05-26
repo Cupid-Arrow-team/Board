@@ -37,4 +37,8 @@ public class Comment extends BaseEntity {
         this.member = member;
         this.comment = comment;
     }
+
+    public void update(Comment comment) {
+        this.comment = comment.getComment();
+    }
 }
