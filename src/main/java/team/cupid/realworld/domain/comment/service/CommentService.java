@@ -1,6 +1,7 @@
 package team.cupid.realworld.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.cupid.realworld.domain.comment.dto.*;
@@ -22,6 +23,11 @@ public class CommentService {
     }
 
     public CommentUpdateResponseDto update(CommentUpdateRequestDto request, Long id) {
+
+        return null;
+    }
+
+    public ResponseEntity<Void> delete(Long commentId, Long id) {
 
         return null;
     }

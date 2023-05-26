@@ -52,4 +52,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        return commentService.delete(commentId, customUserDetails.getId());
+    }
+
 }
