@@ -146,7 +146,7 @@ public class BoardService {
 
         matchBoardWriter(board, memberId);
 
-        boardRepository.delete(board);
+        boardRepository.deleteById(board.getId());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

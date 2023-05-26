@@ -1,6 +1,7 @@
 package team.cupid.realworld.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("Comment Not Found"));
 
         /**
-         * 댓글 작성자, 로그인한 유저 일치 예외처
+         * 댓글 작성자, 로그인한 유저 일치 예외처리
          */
 
         comment.update(request.toEntity());
@@ -65,11 +66,15 @@ public class CommentService {
     }
 
     public ResponseEntity<Void> delete(Long commentId, Long memberId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment Not Found"));
 
         /**
-         * 댓글 작성자, 로그인한 유저 일치 예외처
+         * 댓글 작성자, 로그인한 유저 일치 예외처리
          */
 
-        return null;
+        commentRepository.deleteById(comment.getId());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
