@@ -12,10 +12,10 @@ public class CommentUpdateResponseDto {
 
     private Long commentId;
 
-    private String content;
+    private String comment;
 
-    public static CommentReadResponseDto of(Comment comment) {
-        return CommentReadResponseDto.builder()
+    public static CommentUpdateResponseDto of(Comment comment) {
+        return CommentUpdateResponseDto.builder()
                 .commentId(comment.getId())
                 .comment(comment.getComment())
                 .build();

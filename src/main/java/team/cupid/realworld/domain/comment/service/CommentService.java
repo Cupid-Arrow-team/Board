@@ -48,12 +48,27 @@ public class CommentService {
         return list;
     }
 
-    public CommentUpdateResponseDto update(CommentUpdateRequestDto request, Long id) {
+    public CommentUpdateResponseDto update(CommentUpdateRequestDto request, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
-        return null;
+        Comment comment = commentRepository.findById(request.getCommentId())
+                .orElseThrow(() -> new RuntimeException("Comment Not Found"));
+
+        /**
+         * 댓글 작성자, 로그인한 유저 일치 예외처
+         */
+
+        comment.update(request.toEntity());
+
+        return CommentUpdateResponseDto.of(comment);
     }
 
-    public ResponseEntity<Void> delete(Long commentId, Long id) {
+    public ResponseEntity<Void> delete(Long commentId, Long memberId) {
+
+        /**
+         * 댓글 작성자, 로그인한 유저 일치 예외처
+         */
 
         return null;
     }

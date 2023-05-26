@@ -152,8 +152,8 @@ public class BoardService {
     }
 
     // common method
-    private List<String> getTagNameList(Long id) {
-        return boardTagRepository.findAllByBoardId(id)
+    private List<String> getTagNameList(Long boardId) {
+        return boardTagRepository.findAllByBoardId(boardId)
                 .orElseThrow(() -> new BoardTagNotFoundException(ErrorCode.BOARD_TAG_NOT_FOUND))
                 .stream().map(e -> e.getTag().getName()).collect(Collectors.toList());
     }
