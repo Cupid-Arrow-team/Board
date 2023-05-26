@@ -13,6 +13,7 @@ import team.cupid.realworld.domain.member.domain.Member;
 import team.cupid.realworld.domain.member.domain.repository.MemberRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,9 +36,16 @@ public class CommentService {
         return CommentSaveResponseDto.of(comment);
     }
 
+    @Transactional(readOnly = true)
     public List<CommentReadResponseDto> read(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board Not Found"));
 
-        return null;
+        List<CommentReadResponseDto> list = commentRepository.findAllByBoard(board)
+                .stream().map(e -> CommentReadResponseDto.of(e))
+                .collect(Collectors.toList());
+
+        return list;
     }
 
     public CommentUpdateResponseDto update(CommentUpdateRequestDto request, Long id) {
