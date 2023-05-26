@@ -20,7 +20,7 @@ public class CommentSaveRequestDto {
     private String comment;
 
 
-    public Comment toEntity(Board board, Member member) {
+    public Comment toEntity(Member member, Board board) {
         return Comment.builder()
                 .board(board)
                 .member(member)
