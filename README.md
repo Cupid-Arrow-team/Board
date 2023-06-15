@@ -2,9 +2,9 @@
 
 ---
 
-안녕하세요. 데브옵스 1명, 백엔드 2명으로 이루어진 Team.Cupid 입니다. Java를 이용하여 다양한 기술 활용과 코드 디자인, 마지막에는 프로젝트를 배포까지 하는 과정을 통해 실무 프로젝트 수준의 개발을 목표로 하고 있습니다.
+안녕하세요. 팀 리더 1명, 백엔드 2명으로 이루어진 Team.Cupid 입니다. Java를 이용하여 다양한 기술 활용과 코드 디자인, 코드 리뷰를 통한 서비스 최적화 과정을 통해 실무 프로젝트 수준의 개발을 목표로 하고 있습니다.
 
-- 데브옵스 : GOLF
+- 리더 : GOLF
 - 백엔드
     - 장태현
     - 박성민
@@ -15,7 +15,6 @@
 ---
 
 - Back-end : Spring boot 2.7.6 + Java 11 + MarianaDB + JPA + Security + JWT
-- devops : AWS + Docker + Jenkins
 
 
 # Git Flow
@@ -44,12 +43,3 @@ GitFlow 전략을 사용하여 브랜치를 관리합니다.코드리뷰 : PR을
 6. 작업 완료된 fearure 브랜치를 origin 브랜치로 push 한다.
 7. 해당 브랜치를 upstream으로 PR을 올린다.
 8. 코드 리뷰 진행 후 Merge를 진행한다.
-
-
-
-# 배포 파이프라인
-
----
-
-![https://user-images.githubusercontent.com/77387861/212693158-8b1e4d21-e58f-47cc-87b1-e7bfd16211b9.png](https://user-images.githubusercontent.com/77387861/212693158-8b1e4d21-e58f-47cc-87b1-e7bfd16211b9.png)
-
