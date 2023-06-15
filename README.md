@@ -2,7 +2,7 @@
 
 ---
 
-안녕하세요. 데브옵스 1명, 백엔드 2명으로 이루어진 Team.Cupid 입니다. Java를 이용하여 다양한 기술과 코드 디자인을 해 나가며 고도화된 서비스 제공을 목표로 하고 있습니다.
+안녕하세요. 데브옵스 1명, 백엔드 2명으로 이루어진 Team.Cupid 입니다. Java를 이용하여 다양한 기술 활용과 코드 디자인을 통해 실제 프로젝트 수준의 개발을 목표로 하고 있습니다.
 
 - 데브옵스 : GOLF
 - 백엔드
@@ -16,7 +16,6 @@
 
 - Back-end : Spring boot 2.7.6 + Java 11 + MarianaDB + JPA + Security + JWT
 - devops : AWS + Docker + Jenkins
-
 
 
 # Git Flow
