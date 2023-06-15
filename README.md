@@ -16,7 +16,6 @@
 
 - Back-end : Spring boot 2.7.6 + Java 11 + MarianaDB + JPA + Security + JWT
 - devops : AWS + Docker + Jenkins
-- front-end : react
 
 
 
