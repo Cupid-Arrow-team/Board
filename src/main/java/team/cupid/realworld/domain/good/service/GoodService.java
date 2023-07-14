@@ -29,7 +29,7 @@ public class GoodService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Board board = boardRepository.findById(boardId)
+        Board board = boardRepository.findByIdForUpdate(boardId)
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         Good good = null;
@@ -55,7 +55,7 @@ public class GoodService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Board board = boardRepository.findById(boardId)
+        Board board = boardRepository.findByIdForUpdate(boardId)
                 .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         Good good = goodRepository.findByBoardIdAndMemberMemberId(board.getId(), member.getMemberId())
@@ -70,14 +70,14 @@ public class GoodService{
     }
 
     // exception
-    public void isGood(Good good) {
+    private void isGood(Good good) {
 
         if (good.isGood()) {
             throw new IsGoodException(ErrorCode.ALREADY_LIKED);
         }
     }
 
-    public void isNotGood(Good good) {
+    private void isNotGood(Good good) {
 
         if (!good.isGood()) {
             throw new IsGoodException(ErrorCode.NOT_LIKED);
